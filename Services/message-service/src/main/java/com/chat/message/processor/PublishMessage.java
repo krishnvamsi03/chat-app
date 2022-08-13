@@ -33,10 +33,6 @@ public class PublishMessage {
 
     public PublishMessage() {
         this.convertToJson = new ConvertToJson();
-        this.redisStream =
-                new RedisStream<>(redisClient.getStream(DELIVERY_STATUS_ID),
-                        STREAM_KEY);
-        this.redisStream.createGroup(GROUP_NAME);
     }
 
     public void createMessage(MessageBodyBuilder messageBodyBuilder) throws JsonProcessingException {
@@ -60,5 +56,12 @@ public class PublishMessage {
 
     private InsertOneResult insertDoc(String collectionName, String jsonStr) {
         return mongoApi.createDocument(mongoApi.getMongoCollection(collectionName), jsonStr);
+    }
+
+    public void initializeStream() {
+        this.redisStream =
+                new RedisStream<>(redisClient.getStream(DELIVERY_STATUS_ID),
+                        STREAM_KEY);
+        this.redisStream.createGroup(GROUP_NAME);
     }
 }
