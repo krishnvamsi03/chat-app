@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - REDIS_REPLICATION_MODE=master
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis_data:/bitnami/redis/data
+
+  redis-sentinel:
+    image: 'bitnami/redis-sentinel:latest'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - REDIS_SENTINEL_QUOROM=1
+      - REDIS_MASTER_HOST=localhost
+    depends_on:
+      - redis
+    ports:
+      - "26379:26379"

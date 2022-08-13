@@ -1,0 +1,5 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+/Services/message-service/.idea
+/ops/redis_data
