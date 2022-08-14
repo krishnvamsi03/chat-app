@@ -22,9 +22,4 @@ public class MessageController {
             throw new RuntimeException(e);
         }
     }
-
-    @PostMapping("/messages/{user}")
-    public boolean pullOfflineMessage() {
-        return false;
-    }
 }
