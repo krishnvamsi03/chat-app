@@ -1,4 +1,4 @@
-package com.chat.message.store.mongo;
+package com.chat.message.handler.store.mongo;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;

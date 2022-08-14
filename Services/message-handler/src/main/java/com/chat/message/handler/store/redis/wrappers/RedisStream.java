@@ -1,11 +1,10 @@
-package com.chat.message.store.redis.wrappers;
+package com.chat.message.handler.store.redis.wrappers;
 
 import io.lettuce.core.RedisBusyException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.redisson.api.RStream;
-import org.redisson.api.StreamGroup;
 import org.redisson.api.StreamMessageId;
 import org.redisson.api.stream.StreamAddArgs;
 import org.redisson.api.stream.StreamReadGroupArgs;
@@ -31,12 +30,6 @@ public class RedisStream<V> {
 
     public void createGroup(String groupName) {
         try {
-            for (StreamGroup group: stream.listGroups()) {
-                if (group.getName().equals(groupName)) {
-                    log.debug("Group {} already exits", groupName);
-                    return;
-                }
-            }
             stream.createGroup(groupName, new StreamMessageId(0));
         } catch (RedisBusyException e) {
             log.debug("Group {} already exits", groupName);
