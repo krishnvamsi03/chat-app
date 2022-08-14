@@ -13,7 +13,7 @@ public class MessageController {
     @Autowired
     private ServiceManager serviceManager;
 
-    @PostMapping("/send/{isGroup}")
+    @PostMapping("/message/send/{isGroup}")
     public boolean publishMessage(@RequestBody MessageRequestSchema messageBody,
                                   @PathVariable boolean isGroup) {
         try {
@@ -23,7 +23,7 @@ public class MessageController {
         }
     }
 
-    @PostMapping("/pullmessages/{user}")
+    @PostMapping("/messages/{user}")
     public boolean pullOfflineMessage() {
         return false;
     }

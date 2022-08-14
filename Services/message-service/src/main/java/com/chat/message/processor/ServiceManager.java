@@ -4,7 +4,6 @@ import com.chat.message.Builder.MessageBodyBuilder;
 import com.chat.message.model.MessageRequestSchema;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 public class ServiceManager {
 
@@ -38,7 +37,6 @@ public class ServiceManager {
     public boolean publishMessage(MessageRequestSchema messageRequestSchema) throws JsonProcessingException {
         if (validateRequest(messageRequestSchema)) {
             messageBodyBuilder = messageBodyBuilder.build(messageRequestSchema);
-            publishMessage.initializeStream();
             publishMessage.createMessage(messageBodyBuilder);
             return true;
         }
