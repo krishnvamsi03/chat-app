@@ -29,3 +29,6 @@ hs_err_pid*
 /ops/redis_data
 *.lst
 *.html
+/target
+/target/*
+*/target
