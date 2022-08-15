@@ -5,17 +5,23 @@ import com.chat.message.handler.model.MessagePayload;
 import com.chat.message.handler.model.builder.MessagePayloadBuilder;
 import com.chat.message.handler.store.mongo.MongoApi;
 import com.chat.message.handler.store.redis.wrappers.RedisStream;
+import com.chat.message.handler.websocket.MessageStompSessionHandler;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.redisson.api.stream.StreamReadGroupArgs;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.util.stream.Stream;
 
 @AllArgsConstructor
+@Log4j2
 public class StreamReader {
 
+    private static Logger logger = LoggerFactory.getLogger(StreamReader.class);
     private RedisStream<String> redisStream;
     private StompSession stompSession;
     private MongoApi mongoApi;
@@ -55,14 +61,17 @@ public class StreamReader {
                         messageDoc, messageContentDoc));
                 if (receiptable.getReceiptId() != null || receiptable.getReceiptId().length() > 0) {
                     redisStream.ack(message.getMessageId(), GROUP_NAME);
+                    logger.info("message acknowledge received");
                 }
             }
         });
     }
 
     private boolean checkUserOnline(String user) {
+        logger.info("check user {} availability ", user);
         Document doc = mongoApi.getDocumentOnEq(ACTIVE_USER_SESSIONS, ID,
                 new ObjectId(user));
+
         return doc == null ? false : true;
     }
 

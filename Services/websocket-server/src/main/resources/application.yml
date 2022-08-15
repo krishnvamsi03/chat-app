@@ -6,3 +6,7 @@ spring:
     mongodb:
       uri: mongodb://127.0.0.1:27017/?gssapiServiceName=mongodb
       database: chatApp
+
+services:
+  message:
+    uri: http://localhost:8081/

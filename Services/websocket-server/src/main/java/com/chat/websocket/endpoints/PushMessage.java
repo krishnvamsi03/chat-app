@@ -2,24 +2,32 @@ package com.chat.websocket.endpoints;
 
 import com.chat.websocket.model.MessagePayload;
 import com.chat.websocket.model.MessageRequestSchema;
+import com.chat.websocket.model.MessageResponse;
 import com.chat.websocket.model.ResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.Principal;
 import java.util.LinkedList;
 
+@CrossOrigin
 @Controller
 public class PushMessage {
 
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
+
+    @Value("${services.message.uri}")
+    private String messageUri;
+    private String defaultURI = "{}{}";
+    private static String API_CREATE_MESSAGE = "api/v1/message/send/false";
 
     @MessageMapping("/message")
     public void sendMessage(@Payload MessagePayload messagePayload) {
@@ -27,15 +35,15 @@ public class PushMessage {
     }
 
     @MessageMapping("/put/message")
-    public String putMessage(@Payload MessageRequestSchema request,
+    public ResponseEntity<?> putMessage(@Payload MessageRequestSchema request,
                              Principal user) {
         RestTemplate restTemplate = new RestTemplate();
-        String uri = "http://localhost:8081/api/v1/message/send/false";
+        String uri = String.format(defaultURI, messageUri, API_CREATE_MESSAGE);
         HttpEntity<MessageRequestSchema> entity = new HttpEntity<>(request,
                 createHttpHeader());
         ResponseEntity<?> response = restTemplate.exchange(uri,
-                HttpMethod.POST, entity, Boolean.class);
-        return response.toString();
+                HttpMethod.POST, entity, ResponseEntity.class);
+        return response;
     }
 
     private HttpHeaders createHttpHeader() {

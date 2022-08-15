@@ -2,6 +2,8 @@ package com.chat.message.processor;
 
 import com.chat.message.Builder.MessageBodyBuilder;
 import com.chat.message.converter.ConvertToJson;
+import com.chat.message.model.MessageRequestSchema;
+import com.chat.message.model.MessageResponse;
 import com.chat.message.store.mongo.MongoApi;
 import com.chat.message.store.redis.wrappers.RedisStream;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -9,6 +11,8 @@ import com.mongodb.client.result.InsertOneResult;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
 
 public class PublishMessage {
     @Autowired
@@ -25,10 +29,10 @@ public class PublishMessage {
 
     public PublishMessage(RedisStream<String> redisStream) {
         this.convertToJson = new ConvertToJson();
-        this.redisStream  = redisStream;
+        this.redisStream = redisStream;
     }
 
-    public void createMessage(MessageBodyBuilder messageBodyBuilder) throws JsonProcessingException {
+    public MessageResponse createMessage(MessageBodyBuilder messageBodyBuilder) throws JsonProcessingException {
         InsertOneResult messageContentRes = insertDoc(MESSAGE_CONTENT,
                 convertToJson.getJsonString(messageBodyBuilder.getMessageContentSchema()));
         messageBodyBuilder.getMessageSchema().setMessageContentSchema(getId(messageContentRes));
@@ -39,8 +43,10 @@ public class PublishMessage {
 
         InsertOneResult deliveryRes =
                 mongoApi.createDocument(mongoApi.getMongoCollection(DELIVERY_STATUS),
-                convertToJson.getJsonString(messageBodyBuilder.getDeliveryStatus()));
+                        convertToJson.getJsonString(messageBodyBuilder.getDeliveryStatus()));
         redisStream.add(getId(deliveryRes));
+        return new MessageResponse(Instant.now().toString(),
+                deliveryRes.getInsertedId().asObjectId().getValue().toString(), 202, "successfully added to stream");
     }
 
     private String getId(InsertOneResult res) {
