@@ -1,10 +1,11 @@
 package com.chat.message.handler.reader;
 
+import com.chat.message.handler.store.mongo.MongoApi;
 import com.chat.message.handler.store.redis.wrappers.RedisStream;
-import com.chat.message.handler.websocket.MessageWebSocketClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.PostConstruct;
@@ -13,15 +14,19 @@ import javax.annotation.PostConstruct;
 public class StreamReaderBean {
 
     @Autowired
-    private MessageWebSocketClient messageWebSocketClient;
+    private StompSession stompSession;
 
     @Autowired
     private RedisStream<String> redisStream;
+
+    @Autowired
+    private MongoApi mongoApi;
+
     private StreamReader reader;
 
     @PostConstruct
     public void startStream() {
-        reader = new StreamReader(messageWebSocketClient, redisStream);
+        reader = new StreamReader(redisStream, stompSession, mongoApi);
         reader.readStream();
     }
 
@@ -30,7 +35,7 @@ public class StreamReaderBean {
         return reader;
     }
 
-    @Scheduled(fixedDelayString = "10000")
+    @Scheduled(fixedDelayString = "1000")
     public void readStream() {
         reader.readStream();
     }

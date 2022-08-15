@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import static com.mongodb.client.model.Filters.eq;
 
 @Service
-public class MongoApi {
+public class MongoApi<V> {
 
     @Autowired
     private MongoClient client;
@@ -37,7 +37,7 @@ public class MongoApi {
         return mongoCollection.insertOne(Document.parse(jsonDoc));
     }
 
-    public Document getDocumentOnEq(String collection, String fieldName, String value) {
+    public Document getDocumentOnEq(String collection, String fieldName, V value) {
         return getMongoCollection(collection).find(eq(fieldName, value)).first();
     }
 
