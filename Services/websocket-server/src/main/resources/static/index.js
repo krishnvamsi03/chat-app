@@ -40,7 +40,14 @@ function disconnect() {
 }
 
 function sendName() {
-  stompClient.send("/app/put/message", {}, $("#name").val());
+  let messageBody = {
+    message: $("#name").val(),
+    type: "MESSAGE",
+    sentDateTime: new Date().toUTCString(),
+    senderId: localStorage.getItem("username"),
+    receiverId: "62fa684955ebf12bf61f423f",
+  };
+  stompClient.send("/app/put/message", {}, JSON.stringify(messageBody));
 }
 
 function showGreeting(message) {

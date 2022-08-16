@@ -2,6 +2,7 @@ package com.chat.message.handler.reader;
 
 import com.chat.message.handler.store.mongo.MongoApi;
 import com.chat.message.handler.store.redis.wrappers.RedisStream;
+import com.chat.message.handler.websocket.StompClientConnection;
 import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,7 @@ public class StreamReaderBean {
     private static Logger logger =
             LoggerFactory.getLogger(StreamReaderBean.class);
     @Autowired
-    private StompSession stompSession;
+    private StompClientConnection stompClientConnection;
 
     @Autowired
     private RedisStream<String> redisStream;
@@ -32,7 +33,8 @@ public class StreamReaderBean {
 
     @PostConstruct
     public void startStream() {
-        reader = new StreamReader(redisStream, stompSession, mongoApi);
+        reader = new StreamReader(redisStream,
+                stompClientConnection, mongoApi);
         reader.readStream();
     }
 

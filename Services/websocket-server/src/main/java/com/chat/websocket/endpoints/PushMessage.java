@@ -26,7 +26,7 @@ public class PushMessage {
 
     @Value("${services.message.uri}")
     private String messageUri;
-    private String defaultURI = "{}{}";
+    private String defaultURI = "%s%s";
     private static String API_CREATE_MESSAGE = "api/v1/message/send/false";
 
     @MessageMapping("/message")
@@ -35,14 +35,13 @@ public class PushMessage {
     }
 
     @MessageMapping("/put/message")
-    public ResponseEntity<?> putMessage(@Payload MessageRequestSchema request,
-                             Principal user) {
+    public ResponseEntity<?> putMessage(@Payload MessageRequestSchema request) {
         RestTemplate restTemplate = new RestTemplate();
         String uri = String.format(defaultURI, messageUri, API_CREATE_MESSAGE);
         HttpEntity<MessageRequestSchema> entity = new HttpEntity<>(request,
                 createHttpHeader());
         ResponseEntity<?> response = restTemplate.exchange(uri,
-                HttpMethod.POST, entity, ResponseEntity.class);
+                HttpMethod.POST, entity, MessageResponse.class);
         return response;
     }
 

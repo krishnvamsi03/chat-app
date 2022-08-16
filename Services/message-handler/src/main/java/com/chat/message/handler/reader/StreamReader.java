@@ -6,6 +6,7 @@ import com.chat.message.handler.model.builder.MessagePayloadBuilder;
 import com.chat.message.handler.store.mongo.MongoApi;
 import com.chat.message.handler.store.redis.wrappers.RedisStream;
 import com.chat.message.handler.websocket.MessageStompSessionHandler;
+import com.chat.message.handler.websocket.StompClientConnection;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.bson.Document;
@@ -23,7 +24,7 @@ public class StreamReader {
 
     private static Logger logger = LoggerFactory.getLogger(StreamReader.class);
     private RedisStream<String> redisStream;
-    private StompSession stompSession;
+    private StompClientConnection stompClientConnection;
     private MongoApi mongoApi;
     private static String GROUP_NAME = "MessagesGroup";
     private static String CONSUMER_NAME = "CONSUMER-1";
@@ -40,15 +41,18 @@ public class StreamReader {
     private static String SENT_DATE_TIME = "sentDateTime";
     private static String SENDER = "sender";
     private static String DESTINATION = "/app/message";
+    private static String USER_ID = "userId";
 
 
     public void readStream() {
+        StompSession stompSession = stompClientConnection.getStompSession();
         Stream<RedisStream.StreamData> data = redisStream.readGroup(
                 GROUP_NAME, CONSUMER_NAME,
                 StreamReadGroupArgs.neverDelivered());
         data.forEach(message -> {
-            Document delDoc = mongoApi.getDocumentOnEq(DELIVERY_COLLECTION, ID,
-                    new ObjectId(message.getValue().toString()));
+            Document delDoc =
+                    mongoApi.getDocumentOnEq(DELIVERY_COLLECTION, ID,
+                            new ObjectId(message.getValue().toString()));
             if (checkUserOnline(delDoc.get(RECEIVER).toString())) {
                 Document messageDoc = mongoApi.getDocumentOnEq(MESSAGES, ID,
                         new ObjectId(delDoc.get(MESSAGE_SCHEMA).toString()));
@@ -58,8 +62,8 @@ public class StreamReader {
                                 ).toString()));
                 StompSession.Receiptable receiptable = stompSession.send(
                         DESTINATION, createPayload(delDoc,
-                        messageDoc, messageContentDoc));
-                if (receiptable.getReceiptId() != null || receiptable.getReceiptId().length() > 0) {
+                                messageDoc, messageContentDoc));
+                if (receiptable.getReceiptId() != null && receiptable.getReceiptId().length() > 0) {
                     redisStream.ack(message.getMessageId(), GROUP_NAME);
                     logger.info("message acknowledge received");
                 }
@@ -69,9 +73,11 @@ public class StreamReader {
 
     private boolean checkUserOnline(String user) {
         logger.info("check user {} availability ", user);
-        Document doc = mongoApi.getDocumentOnEq(ACTIVE_USER_SESSIONS, ID,
-                new ObjectId(user));
-
+        Document doc = mongoApi.getDocumentOnEq(ACTIVE_USER_SESSIONS, USER_ID,
+                user);
+        if (doc == null) {
+            logger.info("user {} is not available", user);
+        }
         return doc == null ? false : true;
     }
 
