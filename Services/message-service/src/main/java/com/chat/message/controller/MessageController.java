@@ -5,6 +5,7 @@ import com.chat.message.model.MessageRequestSchema;
 import com.chat.message.model.MessageResponse;
 import com.chat.message.processor.ServiceManager;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,5 @@ public class MessageController {
                     HttpStatus.BAD_REQUEST);
         }
     }
-
 
 }

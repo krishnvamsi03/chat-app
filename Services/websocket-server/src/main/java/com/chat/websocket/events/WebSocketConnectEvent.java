@@ -36,6 +36,7 @@ public class WebSocketConnectEvent implements ApplicationListener<SessionConnect
         try {
             String jsonDoc = convertToJson.getJsonString(activeSessionSchema);
             mongoApi.createDocument(mongoApi.getMongoCollection(ACTIVE_USER_SESSIONS), jsonDoc);
+
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

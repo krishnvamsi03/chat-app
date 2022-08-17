@@ -22,6 +22,9 @@ function connect() {
       stompClient.subscribe("/user/queue/messages", function (greeting) {
         showGreeting(JSON.parse(greeting.body).message);
       });
+      stompClient.subscribe("/topic/availableUsers", function (message) {
+        getAvailableUsers(JSON.parse(message.body));
+      })
     }
   );
 }
@@ -52,6 +55,16 @@ function sendName() {
 
 function showGreeting(message) {
   $("#greetings").append("<tr><td>" + message + "</td></tr>");
+}
+
+function getAvailableUsers(result) {
+  
+    $("#users").empty();
+    for (let x in result) {
+      if (x !== localStorage.getItem("username")) {
+        $("#users").append("<tr><td>" + result[x] + "</td></tr>");
+      }
+    }
 }
 
 function login() {
