@@ -1,0 +1,5 @@
+.messagesTable {
+    height: 100%;
+    overflow-y: scroll;
+    float: left;
+}

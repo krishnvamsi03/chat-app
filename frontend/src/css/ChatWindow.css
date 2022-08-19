@@ -1,0 +1,34 @@
+/* .header {
+    position: fixed;
+    top: 0;
+} */
+
+.footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    margin: 0px 5px 5px 5px;
+}
+
+.chatWindow {
+    height: 100%;
+    width: 60%;
+    float: right;
+}
+
+.sendInput {
+    position: relative;
+    width: 60%;
+    overflow: hidden;
+    height: 100%;
+}
+
+.inp {
+    float: left;
+    width: 90%;
+}
+
+.sendBtn {
+    width: 10%;
+    float: right;
+}
