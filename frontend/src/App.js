@@ -9,7 +9,7 @@ import ChatWindow from "./components/ChatWindow";
 import HomePage from "./components/HomePage";
 
 function App() {
-  const [showAuthPage, setShowAuthPage] = useState(false);
+  const [showAuthPage, setShowAuthPage] = useState(true);
   const [showHomePage, setHomePage] = useState(true);
 
   function updateHomePageVar(value) {

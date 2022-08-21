@@ -3,3 +3,31 @@
     overflow-y: scroll;
     float: left;
 }
+
+.message-header {
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    margin-left: auto;
+    align-items: center;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    justify-content: flex-end;
+}
+
+.available-user, .create-group {
+    border: 50%;
+    height: 30px;
+    width: 30px;
+    float: right;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.message-heading {
+    margin-left: 20px;
+}
