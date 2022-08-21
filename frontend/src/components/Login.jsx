@@ -40,7 +40,8 @@ const Login = () => {
           </button>
         </div>
         <p className="forgot-password text-right">
-          Forgot <Link to={"/"}>password?</Link>
+          Forgot <Link to={"/"}>password?</Link> | New User click{" "}
+          <Link to={"/sign-up"}>here</Link>
         </p>
       </form>
     </div>

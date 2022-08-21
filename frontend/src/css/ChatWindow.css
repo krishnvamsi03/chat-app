@@ -1,7 +1,9 @@
-/* .header {
-    position: fixed;
-    top: 0;
-} */
+
+:root {
+    --chat-text-bg: #f1f2f6;
+    --theme-color: #0086ff;
+    --chat-header-bg: linear-gradient( to bottom, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 78%, rgba(255, 255, 255, 0) 100% )
+}
 
 .footer {
     position: fixed;
@@ -12,13 +14,20 @@
 
 .chatWindow {
     height: 100%;
-    width: 60%;
+    width: 70%;
     float: right;
+    background-color: #2f3236;
+}
+
+.chat {
+    overflow: auto;
+    margin-top: 5px;
+    background-color: #2f3236;
 }
 
 .sendInput {
     position: relative;
-    width: 60%;
+    width: 70%;
     overflow: hidden;
     height: 100%;
 }
@@ -31,4 +40,89 @@
 .sendBtn {
     width: 10%;
     float: right;
+}
+
+.detail-area {
+    display: flex;
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background: var(--chat-header-bg);
+}
+
+.detail-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.chat-msg-text {
+    background-color: var(--chat-text-bg);
+    padding: 15px;
+    border-radius: 20px 20px 20px 0;
+    line-height: 1.5;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 5px;
+}
+
+.chat-msg-content {
+    margin-left: 12px;
+    max-width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.chat-msg-content-owner {
+    margin-left: 0px;
+    margin-right: 12px;
+    max-width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    float: right;
+}
+
+.chat-msg-text-owner {
+    background-color: #0086ff;
+    padding: 15px;
+    border-radius: 20px 20px 0 20px;
+    line-height: 1.5;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    margin-top: 5px;
+}
+
+.chat-msg-owner {
+    flex-direction: row-reverse;
+}
+
+.chat-area-header {
+    display: flex;
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background: #2f3236;
+    color: #d1d1d2;
+}
+
+.chat-area-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.custom-li {
+    background-color: #2f3236 !important;
+    color: #d1d1d2;
 }

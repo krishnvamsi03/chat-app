@@ -3,7 +3,7 @@ import React from "react";
 const MessageCard = () => {
   return (
     <div>
-      <li className="list-group-item d-flex justify-content-between align-items-start">
+      <li className="list-group-item d-flex justify-content-between align-items-start custom-li">
         <div className="ms-2 me-auto">
           <div className="fw-bold">Subheading</div>
           Cras justo odio

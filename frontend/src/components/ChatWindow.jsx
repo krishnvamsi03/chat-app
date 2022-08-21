@@ -4,18 +4,32 @@ import "../css/ChatWindow.css";
 const ChatWindow = () => {
   return (
     <div className="chatWindow">
-      <div className="header">
-        <span>
-          To: <span className="name">Dog Woofson</span>
-        </span>
+      <div class="chat-area-header">
+        <div class="chat-area-title">Test User</div>
       </div>
       <div className="chat" data-chat="person1">
-        <div className="conversation-start">
-          <span>Today, 6:48 AM</span>
+        <div className="chat-msg">
+          <div className="chat-msg-content">
+            <div className="chat-msg-text">
+              Luctus et ultrices posuere cubilia curae.
+            </div>
+            <div className="chat-msg-text">
+              Neque gravida in fermentum et sollicitudin ac orci phasellus
+              egestas. Pretium lectus quam id leo.
+            </div>
+          </div>
         </div>
-        <div className="bubble you">Hello,</div>
-        <div className="bubble you">it's me.</div>
-        <div className="bubble you">I was wondering...</div>
+        <div className="chat-msg-owner">
+          <div className="chat-msg-content-owner">
+            <div className="chat-msg-text-owner">
+              Luctus et ultrices posuere cubilia curae.
+            </div>
+            <div className="chat-msg-text-owner">
+              Neque gravida in fermentum et sollicitudin ac orci phasellus
+              egestas. Pretium lectus quam id leo.
+            </div>
+          </div>
+        </div>
       </div>
       <div className="footer">
         <div className="sendInput">
