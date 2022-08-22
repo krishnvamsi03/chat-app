@@ -1,0 +1,11 @@
+server:
+  port: 8084
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://127.0.0.1:27017/?gssapiServiceName=mongodb
+      database: chatApp
+
+jwt:
+  secret: test123
