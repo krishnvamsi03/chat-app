@@ -7,6 +7,7 @@ import com.chat.message.processor.ServiceManager;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,15 +38,27 @@ public class MessageController {
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody Login login) {
-        MessageResponse messageResponse = serviceManager.getUserId(login);
-        if (messageResponse.getStatusCode() == 200) {
-            return new ResponseEntity<>(messageResponse, HttpStatus.ACCEPTED);
-        } else {
-            return new ResponseEntity<>(messageResponse,
-                    HttpStatus.BAD_REQUEST);
-        }
+    @GetMapping("/chats/{userId}")
+    public ResponseEntity<?> getUserChats(@RequestHeader(HttpHeaders.AUTHORIZATION) String header,
+                                          String userId) {
+        return null;
+    }
+
+    @GetMapping("/chats/users/{sender}/{receiver}")
+    public ResponseEntity<?> getUsersChats(@RequestHeader(HttpHeaders.AUTHORIZATION) String header,
+                                           String sender, String receiver) {
+        return null;
+    }
+
+    @GetMapping("/chats/group/{groupId}")
+    public ResponseEntity<?> getGroupChats(@RequestHeader(HttpHeaders.AUTHORIZATION) String header,
+                                           String groupId) {
+        return null;
+    }
+
+    @GetMapping("/messages/{userId}")
+    public ResponseEntity<?> getUserMessages(@RequestHeader(HttpHeaders.AUTHORIZATION) String header) {
+        return null;
     }
 
 }
