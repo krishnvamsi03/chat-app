@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { registerUser } from "../js/SignUp";
 
 const SignUp = () => {
   return (
@@ -8,11 +9,12 @@ const SignUp = () => {
         <h3>Sign Up</h3>
         <div className="mb-3">
           <label>Username</label>
-          <input type="text" className="form-control" placeholder="Username" />
+          <input id="signUpUsername" type="text" className="form-control" placeholder="Username" />
         </div>
         <div className="mb-3">
           <label>Email address</label>
           <input
+            id="signUpEmailAddress"
             type="text"
             className="form-control"
             placeholder="Enter Email"
@@ -21,7 +23,8 @@ const SignUp = () => {
         <div className="mb-3">
           <label>Password</label>
           <input
-            type="email"
+            id="signUpPassword"
+            type="password"
             className="form-control"
             placeholder="Enter password"
           />
@@ -29,13 +32,14 @@ const SignUp = () => {
         <div className="mb-3">
           <label>Confirm password</label>
           <input
-            type="password"
+            id="signUpConfPassword"
+            type="text"
             className="form-control"
             placeholder="Enter password again"
           />
         </div>
         <div className="d-grid">
-          <button type="submit" className="btn btn-primary">
+          <button type="button" className="btn btn-primary" onClick={registerUser}>
             Sign Up
           </button>
         </div>
