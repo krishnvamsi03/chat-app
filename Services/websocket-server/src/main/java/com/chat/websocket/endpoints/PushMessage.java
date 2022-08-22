@@ -15,15 +15,20 @@ import org.springframework.http.*;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.Principal;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @CrossOrigin
 @Controller
@@ -50,26 +55,30 @@ public class PushMessage {
 
     @Scheduled(fixedRate = 2000)
     public void sendAvailableUser() {
-        simpMessagingTemplate.convertAndSend("/topic/availableUsers", getAvailableUsers());
+        simpMessagingTemplate.convertAndSend("/topic/availableUsers",
+        getAvailableUsers());
     }
 
-    @MessageMapping("/put/message")
-    public ResponseEntity<?> putMessage(@Payload MessageRequestSchema request) {
+    @MessageMapping("/message")
+    public ResponseEntity<?> putMessage(@Payload MessageRequestSchema request
+            , SimpMessageHeaderAccessor headerAccessor) {
         RestTemplate restTemplate = new RestTemplate();
         String uri = String.format(defaultURI, messageUri, API_CREATE_MESSAGE);
         HttpEntity<MessageRequestSchema> entity = new HttpEntity<>(request,
-                createHttpHeader());
+                createHttpHeader(headerAccessor.getHeader(AUTHORIZATION).toString()));
         ResponseEntity<?> response = restTemplate.exchange(uri,
                 HttpMethod.POST, entity, MessageResponse.class);
         return response;
     }
 
-    private HttpHeaders createHttpHeader() {
+    private HttpHeaders createHttpHeader(String authorizationHeader) {
         HttpHeaders httpHeaders = new HttpHeaders();
         LinkedList<MediaType> acceptedType = new LinkedList<>();
         acceptedType.add(MediaType.APPLICATION_JSON);
         acceptedType.add(MediaType.MULTIPART_FORM_DATA);
         httpHeaders.setAccept(acceptedType);
+        httpHeaders.put(AUTHORIZATION,
+                Collections.singletonList(authorizationHeader));
         httpHeaders.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; " +
                 "x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840" +
                 ".99 Safari/537.36");

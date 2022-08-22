@@ -4,6 +4,7 @@ import com.chat.message.model.Login;
 import com.chat.message.model.MessageRequestSchema;
 import com.chat.message.model.MessageResponse;
 import com.chat.message.processor.ServiceManager;
+import com.chat.message.utility.Jwtutitliy;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,18 @@ public class MessageController {
     @Autowired
     private ServiceManager serviceManager;
 
+    @Autowired
+    private Jwtutitliy jwtutitliy;
+
     @PostMapping("/message/send/{isGroup}")
     public ResponseEntity<?> publishMessage(@RequestBody MessageRequestSchema messageBody,
+                                            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
                                             @PathVariable boolean isGroup) {
+        String token = authorizationHeader.split(" ")[1];
+        if (!jwtutitliy.validateToken(token)) {
+            return new ResponseEntity<>("Not a valid token, token expired or maybe bad credentials",
+                    HttpStatus.BAD_REQUEST);
+        }
         try {
             MessageResponse response =
                     serviceManager.publishMessage(messageBody);
