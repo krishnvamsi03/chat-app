@@ -59,7 +59,7 @@ public class PushMessage {
         getAvailableUsers());
     }
 
-    @MessageMapping("/message")
+    @MessageMapping("/websocket/message")
     public ResponseEntity<?> putMessage(@Payload MessageRequestSchema request
             , SimpMessageHeaderAccessor headerAccessor) {
         RestTemplate restTemplate = new RestTemplate();

@@ -3,14 +3,27 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AvailableUsers from "./components/AvailableUsers";
 import ChatWindow from "./components/ChatWindow";
 import HomePage from "./components/HomePage";
 
 function App() {
-  const [showAuthPage, setShowAuthPage] = useState(true);
+  const [showAuthPage, setShowAuthPage] = useState(false);
   const [showHomePage, setHomePage] = useState(true);
+
+  const tokenKey = "chatJWTToken";
+
+  useEffect(() => {
+    if (
+      localStorage.getItem(tokenKey) !== null &&
+      localStorage.getItem(tokenKey).length > 0
+    ) {
+      setShowAuthPage(true);
+    } else {
+      setShowAuthPage(false);
+    }
+  });
 
   function updateHomePageVar(value) {
     setHomePage(value);
@@ -54,8 +67,6 @@ function App() {
           </div>
         </nav>
         <div className="window">
-          {console.log("show auth page", showAuthPage)}
-          {console.log("show home page", showHomePage)}
           {showAuthPage ? (
             <React.Fragment>
               <AvailableUsers />

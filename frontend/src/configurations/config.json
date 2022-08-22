@@ -1,0 +1,5 @@
+{
+    "WEBSOCKET_SERVER_URL": "http://localhost:8082",
+    "AUTH_SERVER_URL": "http://localhost:8084",
+    "MESSAGE_SERVER_URL": "http://localhost:8081"
+}

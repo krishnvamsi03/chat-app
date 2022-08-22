@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { login } from "../js/Login";
 
 const Login = () => {
   return (
@@ -7,16 +8,18 @@ const Login = () => {
       <form>
         <h3>Sign In</h3>
         <div className="mb-3">
-          <label>Email address</label>
+          <label>Username</label>
           <input
+            id="logUsername"
             type="email"
             className="form-control"
-            placeholder="Enter email"
+            placeholder="Enter username"
           />
         </div>
         <div className="mb-3">
           <label>Password</label>
           <input
+            id="logPassword"
             type="password"
             className="form-control"
             placeholder="Enter password"
@@ -35,7 +38,7 @@ const Login = () => {
           </div>
         </div>
         <div className="d-grid">
-          <button type="submit" className="btn btn-primary">
+          <button type="button" className="btn btn-primary" onClick={login}>
             Submit
           </button>
         </div>

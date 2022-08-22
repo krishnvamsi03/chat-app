@@ -30,6 +30,7 @@ public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         RequestUpgradeStrategy upgradeStrategy = new TomcatRequestUpgradeStrategy();
         registry.addEndpoint("/pullmessage")
+                .setAllowedOriginPatterns("*")
                 .withSockJS();
     }
 
